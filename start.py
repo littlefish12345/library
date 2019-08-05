@@ -8,7 +8,10 @@ import flask
 import json
 import sys
 import os
-sys.path.append(os.getcwd()+'\\htmls')
+if platform.system() == 'Windows':
+    sys.path.append(os.getcwd()+'\\htmls')
+else:
+    sys.path.append(os.getcwd()+'\\htmls')
 from htmls import *
 
 version = '1.0'
@@ -17,12 +20,27 @@ account_json = open('accounts.json','r')
 accounts = json.loads(account_json.read())
 account_json.close()
 
-for key in accounts:
-    if not os.path.isdir(os.getcwd()+'\\files\\'+key):
-        os.mkdir(os.getcwd()+'\\files\\'+key)
+if platform.system() == 'Windows':
+    if not os.path.isdir(os.getcwd()+'\\files'):
+        os.mkdir(os.getcwd()+'\\files')
 
-if not os.path.isdir(os.getcwd()+'\\files\\public'):
-    os.mkdir(os.getcwd()+'\\files\\public')
+    for key in accounts:
+        if not os.path.isdir(os.getcwd()+'\\files\\'+key):
+            os.mkdir(os.getcwd()+'\\files\\'+key)
+
+    if not os.path.isdir(os.getcwd()+'\\files\\public'):
+        os.mkdir(os.getcwd()+'\\files\\public')
+
+else:
+    if not os.path.isdir(os.getcwd()+'/files'):
+        os.mkdir(os.getcwd()+'/files')
+
+    for key in accounts:
+        if not os.path.isdir(os.getcwd()+'/files/'+key):
+            os.mkdir(os.getcwd()+'/files/'+key)
+
+    if not os.path.isdir(os.getcwd()+'/files/public'):
+        os.mkdir(os.getcwd()+'/files/public')
 
 app = flask.Flask(__name__)
 user_logined_key = {}

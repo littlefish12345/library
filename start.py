@@ -176,7 +176,11 @@ def clout_storage_dir(file_dir):
             if not((file_dir_list[0] != user) ^ (file_dir_list[0] != 'public')):
                 return '<script>window.location.href="/file/allfiles"</script>'
             for file_name in os.listdir(filedir):
-                if os.path.isdir(filedir+'\\'+file_name):
+                if platform.system() == 'Windows':
+                    file_all_dir = filedir+'\\'+file_name
+                else:
+                    file_all_dir = filedir+'/'+file_name
+                if os.path.isdir(file_all_dir):
                     html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
                 else:
                     html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+'''/download'>'''+file_name+'''</a> <a href='/file/'''+file_dir+'@'+file_name+'''/view'>预览</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''

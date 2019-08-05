@@ -11,7 +11,7 @@ import os
 if platform.system() == 'Windows':
     sys.path.append(os.getcwd()+'\\htmls')
 else:
-    sys.path.append(os.getcwd()+'\\htmls')
+    sys.path.append(os.getcwd()+'/htmls')
 from htmls import *
 
 version = '1.0'

@@ -1,11 +1,12 @@
 start_page_html = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>网站</title>
+<title>小鱼的网站</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
 <input type='submit' value='云储存' onclick='javascript:window.location = "/file";' />
+<p>此web为开源项目，严禁商用，地址为<a href=https://github.com/littlefish12345/library>https://github.com/littlefish12345/library</a></p>
 </body>
 </html>
 '''
@@ -13,7 +14,7 @@ start_page_html = '''<!DOCTYPE HTML>
 clout_storage_login_html = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -32,7 +33,7 @@ clout_storage_login_html = '''<!DOCTYPE HTML>
 cloud_storage_login_successful = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -47,7 +48,7 @@ setTimeout(function(){window.location.href="/file/allfiles";}, 1200);
 cloud_storage_login_error = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -60,7 +61,7 @@ cloud_storage_login_error = '''<!DOCTYPE HTML>
 cloud_storage_no_password_or_account = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -73,7 +74,7 @@ cloud_storage_no_password_or_account = '''<!DOCTYPE HTML>
 cloud_storage_no_key = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -86,7 +87,7 @@ cloud_storage_no_key = '''<!DOCTYPE HTML>
 cloud_storage_documents_list_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 '''
@@ -112,7 +113,7 @@ logout_html = '''<!DOCTYPE HTML>
 delete_file_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -127,7 +128,7 @@ delete_file_end = '''";' value='返回'>
 upload_html_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -146,7 +147,7 @@ upload_html_end = '''";' value='返回' />
 access_deline = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -158,7 +159,7 @@ access_deline = '''<!DOCTYPE HTML>
 upload_no_file_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -173,7 +174,7 @@ upload_no_file_end = '''/upload";' value='返回' />
 upload_finish_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -188,7 +189,7 @@ upload_finish_end = '''";' value='返回' />
 upload_no_space_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -203,7 +204,7 @@ upload_no_space_end = '''";' value='返回' />
 new_dir_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -222,7 +223,7 @@ new_dir_end = '''";' value='返回' />
 new_dir_success_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -238,7 +239,7 @@ new_dir_success_end = '''";' value='返回' />
 new_dir_no_start = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -254,7 +255,7 @@ new_dir_no_end = '''";' value='返回' />
 view_start_html = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>云储存</title>
+<title>小鱼的云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>

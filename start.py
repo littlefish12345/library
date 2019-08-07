@@ -447,13 +447,13 @@ def view(filedir):
 
     if back_file in ['mp4','mkv']:
         middle_html = middle_html+'''<video src = "/file/'''+filedir+'''/download" width="854px" height="480px" autoplay="autoplay" preload="auto" controls="controls">
-<object type="application/x-shockwave-flash" style="outline:none;" data="/file/'''+filedir+'''/download"width="854" height="480"></object>
+你的浏览器不支持预览视频
 </video>'''
 
     elif back_file in ['flv']:
         middle_html = middle_html+'''<script src="/static/flv.min.js"></script>
 <video id="videoElement" width="854px" height="480px" autoplay="autoplay" preload="auto" controls="controls">
-<object type="application/x-shockwave-flash" style="outline:none;" data="/file/'''+filedir+'''/download"width="854" height="480"></object>
+你的浏览器不支持预览视频
 </video>
 <script>
     if (flvjs.isSupported()) {

@@ -1,7 +1,13 @@
 # library
-这是一个开源的网页项目，编程语言是python3，扩展库是flask
+这是一个开源的网页项目，编程语言是python3，扩展库是flask和requests
 
 使用方法:
+
+去https://www.google.com/recaptcha/admin 申请一个reCAPTCHA v2密钥
+
+修改start.py和  html\\html.py或html/html.py
+
+把密钥对修改一下（相信我，这样会对你们好）
 
 windows:
 
@@ -32,5 +38,7 @@ cd到根目录下,
 tips:
 
 在static文件夹下放一个叫icon的图片，可以设置图标
+
+v1.2 加入：reCAPTCHA v2
 
 v1.0 最初的版本，加入：网盘，下载，上传文件，登录，退出登录，新建文件夹，删除，预览，上一级

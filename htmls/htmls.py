@@ -34,7 +34,7 @@ document.cookie = "recaptcha="+a;
 <input type='password' name='password' placeholder='密码' />
 <input type='submit' id='btn' value='确定' />
 <br></br>
-<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''+your_site_key+'''"></div>
+<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''+recaptcha_site_key+'''"></div>
 </form>
 <p>访客账号为guest，密码为空</p>
 <input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />

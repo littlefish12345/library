@@ -1,9 +1,7 @@
-recaptcha_site_key = '这里填recaptcha给网页用的密钥'
-
 start_page_html = '''<!DOCTYPE HTML>
 <html>
 <head>
-<title>主页</title>
+<title>网站</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
 </head>
 <body>
@@ -13,17 +11,54 @@ start_page_html = '''<!DOCTYPE HTML>
 </html>
 '''
 
+clout_storage_login_guest = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+</head>
+<body>
+<h3>请输入账号和密码</h3>
+<form method='post'>
+<input type='text' name='account' placeholder='账号' />
+<input type='password' name='password' placeholder='密码' />
+<input type='submit' id='btn' value='确定' />
+</form>
+<p>访客账号为guest，密码为空</p>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
 clout_storage_login_html = '''<!DOCTYPE HTML>
 <html>
 <head>
 <title>云储存</title>
 <link rel="shortcut icon" href="/static/icon.jpg">
-<script src="https://www.recaptcha.net/recaptcha/api.js?render=reCAPTCHA_site_key" async defer></script>
+</head>
+<body>
+<h3>请输入账号和密码</h3>
+<form method='post'>
+<input type='text' name='account' placeholder='账号' />
+<input type='password' name='password' placeholder='密码' />
+<input type='submit' id='btn' value='确定' />
+</form>
+<br></br>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
+clout_storage_login_v2_guest_start = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+<script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
 <script>
-function robotVerified(a, b){
-console.log('Verified: not robot');
-document.cookie = "recaptcha="+a;
-//setTimeout(function(){document.getElementById("btn").click()}, 1000);
+function robotVerified(token, b){
+document.cookie = "recaptcha="+token;
+setTimeout(function(){document.getElementById("btn").click()}, 1000);
 }
 </script>
 </head>
@@ -34,9 +69,129 @@ document.cookie = "recaptcha="+a;
 <input type='password' name='password' placeholder='密码' />
 <input type='submit' id='btn' value='确定' />
 <br></br>
-<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''+recaptcha_site_key+'''"></div>
+<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''
+
+clout_storage_login_v2_guest_end = '''"></div>
 </form>
 <p>访客账号为guest，密码为空</p>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
+clout_storage_login_v2_start = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+<script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+<script>
+function robotVerified(token, b){
+document.cookie = "recaptcha="+token;
+setTimeout(function(){document.getElementById("btn").click()}, 1500);
+}
+</script>
+</head>
+<body>
+<h3>请输入账号和密码</h3>
+<form action="?" method='post'>
+<input type='text' name='account' placeholder='账号' />
+<input type='password' name='password' placeholder='密码' />
+<input type='submit' id='btn' value='确定' />
+<br></br>
+<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''
+
+clout_storage_login_v2_end = '''"></div>
+</form>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
+clout_storage_login_v3_guest_start = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+<script src="https://www.recaptcha.net/recaptcha/api.js?render='''
+
+clout_storage_login_v3_guest_middle = '''"></script>
+<script>
+grecaptcha.ready(function() {
+grecaptcha.execute("'''
+
+clout_storage_login_v3_guest_end = '''", {action: 'login'}).then(function(token) {
+document.cookie = "recaptcha="+token;
+});
+});
+</script>
+</head>
+<body>
+<h3>请输入账号和密码</h3>
+<form action="?" method='post'>
+<input type='text' name='account' placeholder='账号' />
+<input type='password' name='password' placeholder='密码' />
+<input type='submit' id='btn' value='确定' />
+</form>
+<p>访客账号为guest，密码为空</p>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
+clout_storage_login_v3_start = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+<script src="https://www.recaptcha.net/recaptcha/api.js?render='''
+
+clout_storage_login_v3_middle = '''"></script>
+<script>
+grecaptcha.ready(function() {
+grecaptcha.execute("'''
+
+clout_storage_login_v3_end = '''", {action: 'login'}).then(function(token) {
+document.cookie = "recaptcha="+token;
+});
+});
+</script>
+</head>
+<body>
+<h3>请输入账号和密码</h3>
+<form action="?" method='post'>
+<input type='text' name='account' placeholder='账号' />
+<input type='password' name='password' placeholder='密码' />
+<input type='submit' id='btn' value='确定' />
+</form>
+<br></br>
+<input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
+</body>
+</html>
+'''
+
+recaptcha_mode_3_v2_html_start = '''<!DOCTYPE HTML>
+<html>
+<head>
+<title>云储存</title>
+<link rel="shortcut icon" href="/static/icon.jpg">
+<script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+<script>
+function robotVerified(token, b){
+document.cookie = document.cookie+";recaptcha="+token;
+setTimeout(function(){document.getElementById("btn").click()}, 1500);
+}
+</script>
+</head>
+<body>
+<h3>请进行人机验证</h3>
+<form action="?" method='post'>
+<div class="g-recaptcha" data-callback="robotVerified" data-sitekey="'''
+
+recaptcha_mode_3_v2_html_end = '''"></div>
+<input type='submit' id='btn' value='确定' />
+</form>
+<br></br>
 <input type='button' name='submit' onclick='javascript:window.location.href="/";' value='返回' />
 </body>
 </html>

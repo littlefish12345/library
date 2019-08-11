@@ -30,9 +30,9 @@ reCAPTCHA_v3_score_min = 0.5
 def read_config(): #读配置文件
     global host,port,reCAPTCHA_mode,debug_mode,guest_enable,reCAPTCHA_v2_HTML_KEY,reCAPTCHA_v2_chat_KEY,reCAPTCHA_v3_HTML_KEY,reCAPTCHA_v3_chat_KEY,reCAPTCHA_v3_score_min
     try:
-        f = open(os.getcwd()+"\config.ini","r")
+        f = open(os.getcwd()+"/config.ini","r")
     except:
-        f = open(os.getcwd()+"\config.ini","w")
+        f = open(os.getcwd()+"/config.ini","w")
         f.close()
         return 0
     lines = f.readlines()

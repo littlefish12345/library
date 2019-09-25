@@ -361,7 +361,9 @@ def clout_storage_dir(file_dir):
 '''
             if not((file_dir_list[0] != user) ^ (file_dir_list[0] != 'public')):
                 return '<script>window.location.href="/file/allfiles"</script>'
-            for file_name in os.listdir(filedir):
+            
+            list_dir = os.listdir(filedir).sort()
+            for file_name in list_dir:
                 file_all_dir = filedir+'/'+file_name
                 if os.path.isdir(file_all_dir):
                     html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
@@ -408,7 +410,9 @@ def clout_storage_dir(file_dir):
 '''
             if file_dir_list[0] != 'public':
                 return '<script>window.location.href="/file/allfiles"</script>'
-            for file_name in os.listdir(filedir):
+
+            list_dir = os.listdir(filedir).sort()
+            for file_name in list_dir:
                 file_all_dir = filedir+'/'+file_name
                 if os.path.isdir(file_all_dir):
                     html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a></p>\n'''

@@ -362,7 +362,8 @@ def clout_storage_dir(file_dir):
             if not((file_dir_list[0] != user) ^ (file_dir_list[0] != 'public')):
                 return '<script>window.location.href="/file/allfiles"</script>'
             
-            list_dir = os.listdir(filedir).sort()
+            list_dir = os.listdir(filedir)
+            list_dir.sort()
             for file_name in list_dir:
                 file_all_dir = filedir+'/'+file_name
                 if os.path.isdir(file_all_dir):
@@ -411,7 +412,8 @@ def clout_storage_dir(file_dir):
             if file_dir_list[0] != 'public':
                 return '<script>window.location.href="/file/allfiles"</script>'
 
-            list_dir = os.listdir(filedir).sort()
+            list_dir = os.listdir(filedir)
+            list_dir.sort()
             for file_name in list_dir:
                 file_all_dir = filedir+'/'+file_name
                 if os.path.isdir(file_all_dir):

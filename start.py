@@ -513,7 +513,7 @@ def upload_file(filedir):
                 return upload_no_space_start+filedir+upload_no_space_end
         else:
             used_space = get_folder_size(os.getcwd()+'/files/'+user)
-            if size < int(accounts[user][1])-free_size:
+            if size < int(accounts[user][1])-used_space:
                 f = open(file_dir+'/'+file.filename,'wb')
                 f.write(file_in)
                 f.close()

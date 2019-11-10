@@ -177,6 +177,13 @@ def get_free_space(folder):
         st = os.statvfs(folder)
         return st.f_bavail * st.f_frsize/1024/1024/1024
 
+def get_folder_size(floder):
+    size = 0
+    for root, dirs, files in os.walk(floder):
+        for f in files:
+            size += os.path.getsize(os.path.join(root, f))
+    return size/1024/1024/1024
+
 def crate_key(user):
     global user_logined_key
     key = ''.join(random.sample(string.ascii_letters + string.digits, 32))
@@ -493,9 +500,9 @@ def upload_file(filedir):
         file = flask.request.files['file']
         file_in = file.read()
         size = len(file_in)/1024/1024/1024
-        free_size = get_free_space(os.getcwd()+'/files/public')
-            
+        
         if file_list[0] == 'public':
+            free_size = get_free_space(os.getcwd()+'/files/public')
             if size < free_size:
                 f = open(file_dir+'/'+file.filename,'wb')
                 f.write(file_in)
@@ -505,6 +512,7 @@ def upload_file(filedir):
             else:
                 return upload_no_space_start+filedir+upload_no_space_end
         else:
+            used_space = get_folder_size(os.getcwd()+'/files/'+user)
             if size < int(accounts[user][1])-free_size:
                 f = open(file_dir+'/'+file.filename,'wb')
                 f.write(file_in)
@@ -667,6 +675,9 @@ def view(filedir):
         
     return view_start_html+middle_html+view_end_html
 
+@app.route('/file/<filedir>/share')
+def share(filedir):
+    pass
 
 #*#==========#*#
 

@@ -25,7 +25,7 @@ cd到根目录下,
 用vim或nano打开accounts.json
 把账号，密码，可以使用的储存空间以以下的方式输入:
 
-"账号":["密码","储存空间"]
+"账号":["密码",[可以在public里删除文件(0/1(false/true)),可以向public上传文件(0/1(false/true)),在public下新建文件夹(0/1(false/true)),有自己的文件夹(0/1(false/true)),自己文件夹的大小(GB)]]
 
 并且要符合json规范
 
@@ -34,6 +34,8 @@ cd到根目录下,
 tips:
 
 在static文件夹下放一个叫icon的图片，可以设置图标
+
+v1.6 加入：权限系统
 
 v1.5 加入：reCAPTCHA v3，reCAPTCHA v3混合reCAPTCHA v2
 

@@ -14,7 +14,7 @@ sys.path.append(os.getcwd()+'/htmls')
 
 from htmls import *
 
-version = '1.5'
+version = '1.6'
 
 host = ''
 port = 5000
@@ -167,6 +167,30 @@ def in_account(account,password):
                 return 1
         except:
             return 0
+
+def can_del_public(account):
+    global accounts
+    if account != 1 and accounts[account][1][0] == 1:
+        return True
+    return False
+
+def can_upload_public(account):
+    global accounts
+    if account != 1 and accounts[account][1][1] == 1:
+        return True
+    return False
+
+def can_make_new_dir_public(account):
+    global accounts
+    if account != 1 and accounts[account][1][2] == 1:
+        return True
+    return False
+
+def have_his_floder(account):
+    global accounts
+    if account != 1 and accounts[account][1][3] == 1:
+        return True
+    return False
 
 def get_free_space(folder):
     if platform.system() == 'Windows':
@@ -324,111 +348,93 @@ def recaptcha_mode_3_v2():
                 return cloud_storage_login_error
 
 @app.route('/file/<file_dir>')
-def clout_storage_dir(file_dir):
+def cloud_storage_dir(file_dir):
     user = in_key(flask.request.cookies.get('key'))
     if not user or (not guest_enable and user == 1):
         key = flask.request.cookies.get('key')
         del_cookie = flask.make_response(cloud_storage_no_key)
         del_cookie.delete_cookie('key')
         return del_cookie
-    elif user != 1:
-        file_dir_list = file_dir.split('@')
-        del file_dir_list[0]
-        
-        for i in range(0,len(file_dir_list)):
-            if file_dir_list[i] == '..':
-                del file_dir_list[i]
-                
-        if len(file_dir_list) == 0 or file_dir_list[0] == '':
-            html_middle = '''<body>
+
+    file_dir_list = file_dir.split('@')
+    for i in range(len(file_dir_list)):
+        if file_dir_list[i] == '..':
+            del file_dir_list[i]
+    del file_dir_list[0]
+
+    if len(file_dir_list) == 0:
+        html_middle_front = '''<body>
 <h3>文件列表(单击文件名下载)</h3>
 <input type='button' name='submit' onclick='javascript:window.location.href="/file/operate/logout";' value='退出登录' />
-<input type='button' name='submit' disabled="disabled" value='上传文件' />
-<input type='button' name='submit' disabled="disabled" value='新建文件夹' />
-<input type='button' name='submit' disabled="disabled" value='上一级' />
+<input type='button' name='submit' disabled value='上传文件' />
+<input type='button' name='submit' disabled value='新建文件夹' />
+<input type='button' name='submit' disabled value='上一级' />
 <p><a href='/file/allfiles@public'>公共 (文件夹)</a></p>
-<p><a href='/file/allfiles@'''+user+''''>私人 (文件夹)</a></p>'''
-            return cloud_storage_documents_list_start+html_middle+cloud_storage_documents_list_end
-        
-        else:
-            filedir = os.getcwd()+'/files/'+'/'.join(file_dir_list)
+'''
 
-            if len(file_dir_list) == 1:
-                last_grade = 'allfiles'
-            
+        if user != 1 and have_his_floder(user):
+            html_middle_front = html_middle_front+'''<p><a href='/file/allfiles@'''+user+''''>私人 (文件夹)</a></p>'''
+        return cloud_storage_documents_list_start+html_middle_front+cloud_storage_documents_list_end
+
+    if not (file_dir_list[0] == 'public' or (file_dir_list[0] == user and have_his_floder(user))):
+        return '<html><head><script>window.location.href="/file/allfiles"</script></head></html>'
+
+    filedir = os.getcwd()+'/files/'+'/'.join(file_dir_list)
+    list_dir = os.listdir(filedir)
+    html_middle = ''
+    for file_name in list_dir:
+        file_all_dir = filedir+'/'+file_name
+        if not can_del_public(user) and file_dir_list[0] == 'public':
+            if os.path.isdir(file_all_dir):
+                html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a></p>\n'''
             else:
-                last_grade = 'allfiles@'+'@'.join(file_dir_list[:-1])
-            
-            html_middle = '''<body>
+                html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+'''/download'>'''+file_name+'''</a> <a href='/file/'''+file_dir+'@'+file_name+'''/view'>预览</a></p>\n'''
+        else:
+            if os.path.isdir(file_all_dir):
+                html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
+            else:
+                html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+'''/download'>'''+file_name+'''</a> <a href='/file/'''+file_dir+'@'+file_name+'''/view'>预览</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
+
+
+    if file_dir_list[0] == 'public':
+        html_middle_front = '''<body>
+<h3>文件列表(单击文件名下载)</h3>
+<input type='button' name='submit' onclick='javascript:window.location.href="/file/operate/logout";' value='退出登录' />
+'''
+        if can_upload_public(user):
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+file_dir+'''/upload";' value='上传文件' />\n'''
+        else:
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' disabled value='上传文件' />\n'''
+        
+        if can_make_new_dir_public(user):
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+file_dir+'''/newdir";' value='新建文件夹' />\n'''
+        else:
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' disabled value='新建文件夹' />\n'''
+
+        if len(file_dir_list) == 0:
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' disabled value='上一级' />\n'''
+        elif len(file_dir_list) == 1:
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/allfiles";' value='上一级' />\n'''
+        else:
+            last_grade = 'allfiles@'+'@'.join(file_dir_list[:-1])
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+last_grade+'''";' value='上一级' />'''
+
+    else:
+        html_middle_front = '''<body>
 <h3>文件列表(单击文件名下载)</h3>
 <input type='button' name='submit' onclick='javascript:window.location.href="/file/operate/logout";' value='退出登录' />
 <input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+file_dir+'''/upload";' value='上传文件' />
 <input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+file_dir+'''/newdir";' value='新建文件夹' />
-<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+last_grade+'''";' value='上一级' />
 '''
-            if not((file_dir_list[0] != user) ^ (file_dir_list[0] != 'public')):
-                return '<script>window.location.href="/file/allfiles"</script>'
-            
-            list_dir = os.listdir(filedir)
-            list_dir.sort()
-            for file_name in list_dir:
-                file_all_dir = filedir+'/'+file_name
-                if os.path.isdir(file_all_dir):
-                    html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
-                else:
-                    html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+'''/download'>'''+file_name+'''</a> <a href='/file/'''+file_dir+'@'+file_name+'''/view'>预览</a> <a href='javascript:if(confirm("确认要删除？")){window.location="/file/'''+file_dir+'@'+file_name+'''/delete";}'>删除</a></p>\n'''
-
-            return cloud_storage_documents_list_start+html_middle+cloud_storage_documents_list_end
-                
-
-    else:
-        file_dir_list = file_dir.split('@')
-        del file_dir_list[0]
-        
-        for i in range(0,len(file_dir_list)):
-            if file_dir_list[i] == '..':
-                del file_dir_list[i]
-                
         if len(file_dir_list) == 0:
-            html_middle = '''<body>
-<h3>文件列表(单击文件名下载)</h3>
-<input type='button' name='submit' onclick='javascript:window.location.href="/file/operate/logout";' value='退出登录' />
-<input type='button' name='submit' disabled="disabled"value='上传文件' />
-<input type='button' name='submit' disabled="disabled" value='新建文件夹' />
-<input type='button' name='submit' disabled="disabled" value='上一级' />
-<p><a href='/file/allfiles@public'>公共 (文件夹)</a></p>'''
-            return cloud_storage_documents_list_start+html_middle+cloud_storage_documents_list_end
-        
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' disabled value='上一级' />\n'''
+        elif len(file_dir_list) == 1:
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/allfiles";' value='上一级' />\n'''
         else:
-            filedir = os.getcwd()+'/files/'+'/'.join(file_dir_list)
+            last_grade = 'allfiles@'+'@'.join(file_dir_list[:-1])
+            html_middle_front = html_middle_front+'''<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+last_grade+'''";' value='上一级' />'''
 
-            if len(file_dir_list) == 1:
-                last_grade = 'allfiles'
-            
-            else:
-                print (file_dir_list)
-                last_grade = 'allfiles@'+'@'.join(file_dir_list[:-1])
-            
-            html_middle = '''<body>
-<h3>文件列表(单击文件名下载)</h3>
-<input type='button' name='submit' onclick='javascript:window.location.href="/file/operate/logout";' value='退出登录' />
-<input type='button' name='submit' disabled="disabled"value='上传文件' />
-<input type='button' name='submit' disabled="disabled" value='新建文件夹'>
-<input type='button' name='submit' onclick='javascript:window.location.href="/file/'''+last_grade+'''";' value='上一级' />
-'''
-            if file_dir_list[0] != 'public':
-                return '<script>window.location.href="/file/allfiles"</script>'
-
-            list_dir = os.listdir(filedir)
-            list_dir.sort()
-            for file_name in list_dir:
-                file_all_dir = filedir+'/'+file_name
-                if os.path.isdir(file_all_dir):
-                    html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+''''>'''+file_name+''' (文件夹)</a></p>\n'''
-                else:
-                    html_middle = html_middle+'''<p><a href='/file/'''+file_dir+'@'+file_name+'''/download'>'''+file_name+'''</a> <a href='/file/'''+file_dir+'@'+file_name+'''/view'>预览</a></p>\n'''
-
-            return cloud_storage_documents_list_start+html_middle+cloud_storage_documents_list_end
+    return cloud_storage_documents_list_start+html_middle_front+html_middle+cloud_storage_documents_list_end
 
 @app.route('/file/operate/logout')
 def logout():
@@ -451,6 +457,9 @@ def delete_file(filename):
     file_list = filename.split('@')
     del file_list[0]
 
+    if file_list[0] == 'public' and (not can_del_public(user)):
+        return access_deline
+
     for i in range(0,len(file_list)):
         if file_list[i] == '..':
             del file_list[i]
@@ -471,6 +480,7 @@ def delete_file(filename):
 
 @app.route('/file/<filedir>/upload',methods=['GET','POST'])
 def upload_file(filedir):
+    global accounts
     user = in_key(flask.request.cookies.get('key'))
     if not user or (not guest_enable and user == 1):
         key = flask.request.cookies.get('key')
@@ -482,6 +492,9 @@ def upload_file(filedir):
 
     file_list = filedir.split('@')
     del file_list[0]
+
+    if file_list[0] == 'public' and (not can_upload_public(user)):
+        return access_deline
 
     for i in range(0,len(file_list)):
         if file_list[i] == '..':
@@ -513,7 +526,7 @@ def upload_file(filedir):
                 return upload_no_space_start+filedir+upload_no_space_end
         else:
             used_space = get_folder_size(os.getcwd()+'/files/'+user)
-            if size < int(accounts[user][1])-used_space:
+            if size < int(accounts[user][1][4])-used_space:
                 f = open(file_dir+'/'+file.filename,'wb')
                 f.write(file_in)
                 f.close()
@@ -537,6 +550,9 @@ def newdir(filedir):
 
     file_list = filedir.split('@')
     del file_list[0]
+
+    if file_list[0] == 'public' and (not can_make_new_dir_public(user)):
+        return access_deline
 
     for i in range(0,len(file_list)):
         if file_list[i] == '..':

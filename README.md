@@ -35,6 +35,8 @@ tips:
 
 在static文件夹下放一个叫icon的图片，可以设置图标
 
+v1.6.2 加入：https，修复一些bug
+
 v1.6 加入：权限系统
 
 v1.5 加入：reCAPTCHA v3，reCAPTCHA v3混合reCAPTCHA v2

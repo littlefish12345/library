@@ -14,13 +14,16 @@ sys.path.append(os.getcwd()+'/htmls')
 
 from htmls import *
 
-version = '1.6'
+version = '1.6.2'
 
 host = ''
 port = 5000
 debug_mode = False
 guest_enable = False
+https_enable = False
 reCAPTCHA_mode = 0
+https_key = ''
+https_cert = ''
 reCAPTCHA_v2_HTML_KEY = ''
 reCAPTCHA_v2_chat_KEY = ''
 reCAPTCHA_v3_HTML_KEY = ''
@@ -28,7 +31,7 @@ reCAPTCHA_v3_chat_KEY = ''
 reCAPTCHA_v3_score_min = 0.5
 
 def read_config(): #读配置文件
-    global host,port,reCAPTCHA_mode,debug_mode,guest_enable,reCAPTCHA_v2_HTML_KEY,reCAPTCHA_v2_chat_KEY,reCAPTCHA_v3_HTML_KEY,reCAPTCHA_v3_chat_KEY,reCAPTCHA_v3_score_min
+    global host,port,reCAPTCHA_mode,debug_mode,guest_enable,reCAPTCHA_v2_HTML_KEY,reCAPTCHA_v2_chat_KEY,reCAPTCHA_v3_HTML_KEY,reCAPTCHA_v3_chat_KEY,reCAPTCHA_v3_score_min,https_enable,https_key,https_cert
     try:
         f = open(os.getcwd()+"/config.ini","r",encoding='utf-8')
     except:
@@ -118,6 +121,29 @@ def read_config(): #读配置文件
             else:
                 reCAPTCHA_v3_score_min = float(lines[i][23:len(lines[i])])
             continue
+        elif lines[i][0:13] == "https_enable=": #处理reCAPTCHA v3的分数最低值
+            #print("reCAPTCHA_v3_score_min=")
+            if lines[i][len(lines[i])-1] == "\n":
+                https_enable_t_or_f = float(lines[i][13:len(lines[i])-1])
+            else:
+                https_enable_t_or_f = float(lines[i][13:len(lines[i])])
+            if https_enable_t_or_f == 'true':
+                https_enable = True
+            continue
+        elif lines[i][0:10] == "https_key=": #处理reCAPTCHA v2给HTML代码中的网站密钥
+            #print("reCAPTCHA_v2_HTML_KEY=")
+            if lines[i][len(lines[i])-1] == "\n":
+                https_key = lines[i][10:len(lines[i])-1]
+            else:
+                https_key = lines[i][10:len(lines[i])]
+            continue
+        elif lines[i][0:11] == "https_cert=": #处理reCAPTCHA v2给HTML代码中的网站密钥
+            #print("reCAPTCHA_v2_HTML_KEY=")
+            if lines[i][len(lines[i])-1] == "\n":
+                https_cert = lines[i][11:len(lines[i])-1]
+            else:
+                https_cert = lines[i][11:len(lines[i])]
+            continue
     if host == '': #如果没有设置服务器ip，则设置为自动
         print("auto get ip...")
         host = gethostbyname(gethostname())
@@ -134,7 +160,11 @@ if not os.path.isdir(os.getcwd()+'/files'):
 
 for key in accounts:
     if not os.path.isdir(os.getcwd()+'/files/'+key):
-        os.mkdir(os.getcwd()+'/files/'+key)
+        if accounts[key][1][3] == 1:
+            os.mkdir(os.getcwd()+'/files/'+key)
+    else:
+        if accounts[key][1][3] != 1:
+            shutil.rmtree(os.getcwd()+'/files/'+key)
 
 if not os.path.isdir(os.getcwd()+'/files/public'):
     os.mkdir(os.getcwd()+'/files/public')
@@ -191,6 +221,14 @@ def have_his_floder(account):
     if account != 1 and accounts[account][1][3] == 1:
         return True
     return False
+
+def get_user_used():
+    global accounts
+    all_used = 0
+    for key in accounts:
+        if accounts[key][1][3] == 1:
+            all_used = all_used+accounts[key][1][4]
+    return all_used
 
 def get_free_space(folder):
     if platform.system() == 'Windows':
@@ -381,6 +419,7 @@ def cloud_storage_dir(file_dir):
 
     filedir = os.getcwd()+'/files/'+'/'.join(file_dir_list)
     list_dir = os.listdir(filedir)
+    list_dir.sort()
     html_middle = ''
     for file_name in list_dir:
         file_all_dir = filedir+'/'+file_name
@@ -515,7 +554,7 @@ def upload_file(filedir):
         size = len(file_in)/1024/1024/1024
         
         if file_list[0] == 'public':
-            free_size = get_free_space(os.getcwd()+'/files/public')
+            free_size = get_free_space(os.getcwd()+'/files/public')-get_user_used()
             if size < free_size:
                 f = open(file_dir+'/'+file.filename,'wb')
                 f.write(file_in)
@@ -698,4 +737,7 @@ def share(filedir):
 #*#==========#*#
 
 if __name__ == '__main__':
-    app.run(debug=debug_mode,host=host,port=port)
+    if https_enable:
+        app.run(debug=debug_mode,host=host,port=port,ssl_context=(https_cert,https_key))
+    else:
+        app.run(debug=debug_mode,host=host,port=port)

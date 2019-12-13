@@ -121,23 +121,23 @@ def read_config(): #读配置文件
             else:
                 reCAPTCHA_v3_score_min = float(lines[i][23:len(lines[i])])
             continue
-        elif lines[i][0:13] == "https_enable=": #处理reCAPTCHA v3的分数最低值
+        elif lines[i][0:13] == "https_enable=": #处理https的开启和关闭
             #print("reCAPTCHA_v3_score_min=")
             if lines[i][len(lines[i])-1] == "\n":
-                https_enable_t_or_f = float(lines[i][13:len(lines[i])-1])
+                https_enable_t_or_f = lines[i][13:len(lines[i])-1]
             else:
-                https_enable_t_or_f = float(lines[i][13:len(lines[i])])
+                https_enable_t_or_f = lines[i][13:len(lines[i])]
             if https_enable_t_or_f == 'true':
                 https_enable = True
             continue
-        elif lines[i][0:10] == "https_key=": #处理reCAPTCHA v2给HTML代码中的网站密钥
+        elif lines[i][0:10] == "https_key=": #处理https的key路径
             #print("reCAPTCHA_v2_HTML_KEY=")
             if lines[i][len(lines[i])-1] == "\n":
                 https_key = lines[i][10:len(lines[i])-1]
             else:
                 https_key = lines[i][10:len(lines[i])]
             continue
-        elif lines[i][0:11] == "https_cert=": #处理reCAPTCHA v2给HTML代码中的网站密钥
+        elif lines[i][0:11] == "https_cert=": #处理https的cert路径
             #print("reCAPTCHA_v2_HTML_KEY=")
             if lines[i][len(lines[i])-1] == "\n":
                 https_cert = lines[i][11:len(lines[i])-1]
